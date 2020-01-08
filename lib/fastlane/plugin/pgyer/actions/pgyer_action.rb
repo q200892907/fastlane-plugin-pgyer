@@ -36,6 +36,11 @@ module Fastlane
         if install_type.nil?
           install_type = "1"
         end
+        
+        channel_shortcut = params[:channel_shortcut]
+        if channel_shortcut.nil?
+          channel_shortcut = ""
+        end
 
         # start upload
         conn_options = {
@@ -58,6 +63,7 @@ module Fastlane
             'password' => password,
             'updateDescription' => update_description,
             'installType' => install_type,
+            'channelShortcut' => channel_shortcut,
             'file' => Faraday::UploadIO.new(build_file, 'application/octet-stream')
         }
 
@@ -139,6 +145,11 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :install_type,
                                   env_name: "PGYER_INSTALL_TYPE",
                                description: "set install type for app (1=public, 2=password, 3=invite). Please set as a string",
+                                  optional: true,
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :channel_shortcut,
+                                  env_name: "PGYER_CHANNEL",
+                               description: "Use channel short link. Please set as a string",
                                   optional: true,
                                       type: String)
         ]
